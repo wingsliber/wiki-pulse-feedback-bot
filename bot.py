@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+feedbacks = []  # Список для хранения фидбеков в памяти
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
@@ -119,16 +120,21 @@ async def confirm_handler(message: Message, state: FSMContext):
     username = f"@{user.username}" if user.username else f"{user.first_name} (id:{user.id})"
     
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
-    log_entry = f"[{timestamp}] USER:{username} | ТИП: {feedback_type} | ТЕКСТ: {feedback_text}\n"
-    
-    with open("feedback.txt", "a", encoding="utf-8") as f:
-        f.write(log_entry)
+
+    feedbacks.append({
+        "timestamp": timestamp,
+        "user": username,
+        "type": feedback_type,
+        "text": feedback_text
+    })
+
+    print(f"[СОХРАНЕНО] {timestamp} | {username} | {feedback_type} | {feedback_text[:50]}...")
     
     await message.answer("Спасибо! Твоё обращение сохранено и в скором времени будет обработано.")
     await state.clear()
 
 async def main():
-    print("Бот запущен! Нажми Ctrl+C чтобы остановить.")
+    print("Бот запущен!")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
