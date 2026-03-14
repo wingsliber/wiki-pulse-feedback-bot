@@ -74,7 +74,7 @@ async def text_received(message: Message, state: FSMContext):
         await message.answer("Текст не может быть пустым. Напиши своё обращение:")
         return
     
-    if len(feedback_text) > 500:
+    if len(feedback_text) > 1000:
         await message.answer(
             f"Слишком длинно! Максимум 1000 символов, у тебя {len(feedback_text)}.\n"
             "Пожалуйста, сократи текст:"
