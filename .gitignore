@@ -1,0 +1,19 @@
+# Секреты
+.env
+token.env
+
+# Файлы фидбека (если не хочешь их в репозитории)
+feedback.txt
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Виртуальное окружение (если создашь позже)
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
