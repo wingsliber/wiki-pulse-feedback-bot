@@ -23,7 +23,7 @@ async def view_handler(message: Message):
         await message.answer("Пока нет обращений")
         return
     
-    response = "📋 Последние обращения:\n\n"
+    response = "Последние обращения:\n\n"
     for i, fb in enumerate(feedback_list, 1):
         response += f"{i}. [{fb['timestamp']}] {fb['user']}\n   {fb['type']}: {fb['text'][:100]}...\n\n"
     
