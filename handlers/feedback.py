@@ -15,7 +15,7 @@ confirm_kb = ReplyKeyboardMarkup(
     one_time_keyboard=True
 )
 
-@router.message(FeedbackStates.choosing_type, F.text.in_({"жалоба", "предложение", "ошибка", "другое"}))
+@router.message(FeedbackStates.choosing_type, F.text.in_({"Жалоба", "Предложение", "Ошибка", "Другое"}))
 async def type_chosen(message: Message, state: FSMContext):
     await state.update_data(feedback_type=message.text)
     await message.answer(f"Тип выбран: {message.text}\nНапиши текст обращения:")
@@ -25,26 +25,26 @@ async def type_chosen(message: Message, state: FSMContext):
 async def text_received(message: Message, state: FSMContext):
     # === ПРОВЕРКА: это текстовое сообщение? ===
     if not message.text:
-        await message.answer("❌ Пожалуйста, отправь текстовое сообщение (не стикер, фото или файл).")
+        await message.answer("Пожалуйста, отправь текстовое сообщение (не стикер, фото или файл). Я работаю только с текстом")
         return
     
     feedback_text = message.text.strip()
     
     if not feedback_text:
-        await message.answer("❌ Текст не может быть пустым. Напиши свой фидбек:")
+        await message.answer("Текст не может быть пустым. Напиши свой фидбек, скриншоты прикладывай ссылкой")
         return
     
     if len(feedback_text) > 1000:
         await message.answer(
-            f"❌ Слишком длинно! Максимум 1000 символов, у тебя {len(feedback_text)}.\n"
-            "Пожалуйста, сократи текст:"
+            f"Слишком длинное сообщение! Максимум 1000 символов, у тебя {len(feedback_text)}.\n"
+            "Пожалуйста, сократи текст"
         )
         return
     
     await state.update_data(feedback_text=feedback_text)
     
     await message.answer(
-        f"❓ Отправляю ваше обращение?\nТИП: {(await state.get_data())['feedback_type']}\nТЕКСТ: {feedback_text[:1000]}...",
+        f"Отправляю обращение?\nТИП: {(await state.get_data())['feedback_type']}\nТЕКСТ: {feedback_text[:1000]}...",
         reply_markup=confirm_kb
     )
     await state.set_state(FeedbackStates.confirming)
@@ -61,7 +61,7 @@ async def confirm_handler(message: Message, state: FSMContext):
     # === ПРОВЕРКА СПАМА ===
     spam, remaining = is_spam(user_id)
     if spam:
-        await message.answer(f"⏳ Недавно ты уже писал обращение. Подожди ещё {remaining} секунд перед следующим обращением")
+        await message.answer(f"Недавно ты уже писал обращение. Подожди ещё {remaining} секунд перед следующим обращением")
         await state.clear()
         return
     

@@ -8,8 +8,8 @@ router = Router()
 
 type_kb = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="жалоба"), KeyboardButton(text="предложение")],
-        [KeyboardButton(text="ошибка"), KeyboardButton(text="другое")]
+        [KeyboardButton(text="Жалоба"), KeyboardButton(text="Предложение")],
+        [KeyboardButton(text="Ошибка"), KeyboardButton(text="Другое")]
     ],
     resize_keyboard=True,
     one_time_keyboard=True
@@ -18,7 +18,7 @@ type_kb = ReplyKeyboardMarkup(
 @router.message(Command("start"))
 async def start_handler(message: Message, state: FSMContext):
     await message.answer(
-        "Привет! Я бот для обратной связи по Вики-Пульс.\nВыбери тип обращения:",
+        "Привет! Я бот для обратной связи по Вики-Пульс.\nВ любой момент ты можешь запустить меня, использовав команду /start.\nДля завершения диалога в любом месте используй /cancel.\nВыбери тип обращения:",
         reply_markup=type_kb
     )
     await state.set_state(FeedbackStates.choosing_type)
