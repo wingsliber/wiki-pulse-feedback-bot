@@ -23,6 +23,11 @@ async def type_chosen(message: Message, state: FSMContext):
 
 @router.message(FeedbackStates.writing_text)
 async def text_received(message: Message, state: FSMContext):
+    # === ПРОВЕРКА: это текстовое сообщение? ===
+    if not message.text:
+        await message.answer("❌ Пожалуйста, отправь текстовое сообщение (не стикер, фото или файл).")
+        return
+    
     feedback_text = message.text.strip()
     
     if not feedback_text:
@@ -39,7 +44,7 @@ async def text_received(message: Message, state: FSMContext):
     await state.update_data(feedback_text=feedback_text)
     
     await message.answer(
-        f"❓ Отправляю ваше обращение?\nТИП: {(await state.get_data())['feedback_type']}\nТЕКСТ: {feedback_text[:500]}...",
+        f"❓ Отправляю ваше обращение?\nТИП: {(await state.get_data())['feedback_type']}\nТЕКСТ: {feedback_text[:1000]}...",
         reply_markup=confirm_kb
     )
     await state.set_state(FeedbackStates.confirming)
