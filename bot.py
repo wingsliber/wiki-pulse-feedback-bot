@@ -15,17 +15,17 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Словарь: {user_id: timestamp_последнего_фидбека}
+# Словарь: {user_id: timestamp_последнего_фидбека} Нужно, чтобы не спамить записями (просто так)
 last_feedback_time = defaultdict(lambda: datetime.datetime.min)
 COOLDOWN_SECONDS = 60  # 1 минута между фидбеками
 
-# Определяем шаги диалога (как этапы тест-кейса)
+# Определяем шаги диалога
 class FeedbackStates(StatesGroup):
-    choosing_type = State()  # Шаг 1: выбор типа
-    writing_text = State()   # Шаг 2: ввод текста
-    confirming = State()
+    choosing_type = State()  # Выбор типа (кнопки)
+    writing_text = State()   # Ввод текста
+    confirming = State()     # Подтверждение (кнопка, которая завершает диалог)
 
-# Кнопки для выбора типа (как в мобильном приложении)
+# Кнопки для выбора типа
 type_kb = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="ошибка"), KeyboardButton(text="предложение")],
